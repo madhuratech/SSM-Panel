@@ -5,7 +5,11 @@ import Instagram from '../pages/Instagram'
 import Facebook from '../pages/Facebook'
 import YouTube from '../pages/YouTube'
 import Checkout from '../pages/Checkout'
-import Search from '../pages/search'
+import Search from '../pages/Search'
+import PackagesPage from '../pages/PackagesPage'
+import Dashboard from '../pages/Dashboard'
+
+
 
 const AppRoutes = () => {
   return (
@@ -16,7 +20,10 @@ const AppRoutes = () => {
       <Route path="/facebook" element={<Facebook />} />
       <Route path="/youtube" element={<YouTube />} />
       <Route path="/checkout" element={<Checkout />} />
-      <Route path="/search" element={<Search />} />
+      <Route path="/search" element={<Search/>} />
+      <Route path="/packagespage" element={<PackagesPage />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+    
     </Routes>
   )
 }

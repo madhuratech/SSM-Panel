@@ -28,7 +28,7 @@ const Dashboard = () => {
                     { id: 6, image: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308" },
                 ],
             };
-
+            
             setProfile(fakeData);
             setPosts(fakeData.posts);
             setLoading(false);
