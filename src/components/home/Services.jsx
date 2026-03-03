@@ -14,7 +14,7 @@ const Services = () => {
       name: 'Instagram',
       icon: '📸',
       description: 'Grow your Instagram account with authentic engagement.',
-      path: '/instagram',
+      path: '/search',
       gradient: 'from-purple-500 to-pink-600'
     },
     {
