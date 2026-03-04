@@ -1,37 +1,43 @@
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import SectionWrapper from '../common/SectionWrapper'
 
 const Services = () => {
+  const navigate = useNavigate()
+  
   const platforms = [
     {
       name: 'TikTok',
       icon: '🎵',
       description: 'Boost your TikTok presence with real followers, likes, and views.',
-      path: '/tiktok',
+      path: 'tiktok',
       gradient: 'from-pink-500 to-purple-600'
     },
     {
       name: 'Instagram',
       icon: '📸',
       description: 'Grow your Instagram account with authentic engagement.',
-      path: '/search',
+      path: 'instagram',
       gradient: 'from-purple-500 to-pink-600'
     },
     {
       name: 'Facebook',
       icon: '👥',
       description: 'Increase your Facebook reach with real likes and followers.',
-      path: '/facebook',
+      path: 'facebook',
       gradient: 'from-blue-500 to-blue-600'
     },
     {
       name: 'YouTube',
       icon: '▶️',
       description: 'Get more YouTube subscribers, views, and engagement.',
-      path: '/youtube',
+      path: 'youtube',
       gradient: 'from-red-500 to-red-600'
     }
   ]
+
+  const handlePlatformClick = (platform) => {
+    navigate('/search', { state: { platform: platform.path, service: null } })
+  }
 
   return (
     <SectionWrapper background="white" id="services">
@@ -53,14 +59,37 @@ const Services = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {platforms.map((platform) => (
-            <Link
+            <button
               key={platform.name}
-              to={platform.path}
-              className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden"
+              onClick={() => handlePlatformClick(platform)}
+              className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 text-left w-full border-2 border-transparent hover:border-transparent"
             >
-              {/* Glow effect on hover */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${platform.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}></div>
-              <div className={`absolute -inset-1 bg-gradient-to-br ${platform.gradient} rounded-2xl blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-300 -z-10`}></div>
+              {/* Subtle background color on hover */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${platform.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-2xl`}></div>
+              
+              {/* Smooth animated flowing border */}
+              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200" style={{ overflow: 'visible' }}>
+                <defs>
+                  <linearGradient id={`border-gradient-${platform.name}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor={platform.name === 'TikTok' ? '#ec4899' : platform.name === 'Instagram' ? '#a855f7' : platform.name === 'Facebook' ? '#3b82f6' : '#ef4444'} stopOpacity="0" />
+                    <stop offset="50%" stopColor={platform.name === 'TikTok' ? '#ec4899' : platform.name === 'Instagram' ? '#a855f7' : platform.name === 'Facebook' ? '#3b82f6' : '#ef4444'} stopOpacity="1" />
+                    <stop offset="100%" stopColor={platform.name === 'TikTok' ? '#ec4899' : platform.name === 'Instagram' ? '#a855f7' : platform.name === 'Facebook' ? '#3b82f6' : '#ef4444'} stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <rect
+                  x="1"
+                  y="1"
+                  width="calc(100% - 2px)"
+                  height="calc(100% - 2px)"
+                  rx="15"
+                  fill="none"
+                  stroke={`url(#border-gradient-${platform.name})`}
+                  strokeWidth="2"
+                  strokeDasharray="1000"
+                  strokeDashoffset="1000"
+                  className="animate-border-draw-smooth"
+                />
+              </svg>
               
               <div className="relative z-10">
                 <div className={`w-16 h-16 bg-gradient-to-br ${platform.gradient} rounded-2xl flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
@@ -82,7 +111,7 @@ const Services = () => {
                   </svg>
                 </div>
               </div>
-            </Link>
+            </button>
           ))}
         </div>
       </div>

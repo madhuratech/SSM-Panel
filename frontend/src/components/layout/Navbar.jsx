@@ -1,13 +1,29 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Button from '../common/Button'
+import { authAPI } from '../../utils/auth'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState(null)
   const [closeTimeout, setCloseTimeout] = useState(null)
+  const [user, setUser] = useState(null)
+  const [showUserMenu, setShowUserMenu] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    // Check if user is logged in
+    const loggedInUser = authAPI.getUser()
+    setUser(loggedInUser)
+  }, [location])
+
+  const handleLogout = () => {
+    authAPI.logout()
+    setUser(null)
+    setShowUserMenu(false)
+    navigate('/')
+  }
 
   const platforms = [
     {
@@ -54,8 +70,8 @@ const Navbar = () => {
 
   const isActive = (path) => location.pathname === path
 
-  const handleServiceClick = (platformPath, service) => {
-    navigate(platformPath, { state: { selectedService: service } })
+  const handleServiceClick = (platformPath) => {
+    navigate(platformPath)
     setActiveDropdown(null)
   }
 
@@ -118,7 +134,7 @@ const Navbar = () => {
                         {platform.services.map((service) => (
                           <button
                             key={service.service}
-                            onClick={() => handleServiceClick(platform.path, service.service)}
+                            onClick={() => handleServiceClick(platform.path)}
                             className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors"
                           >
                             {service.name}
@@ -161,7 +177,7 @@ const Navbar = () => {
                     {platform.services.map((service) => (
                       <button
                         key={service.service}
-                        onClick={() => handleServiceClick(platform.path, service.service)}
+                        onClick={() => handleServiceClick(platform.path)}
                         className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors"
                       >
                         {service.name}
@@ -172,16 +188,64 @@ const Navbar = () => {
               </div>
             ))}
 
-            <a href="/#services">
-              <Button size="sm">Get Started</Button>
-            </a>
-            
-            <a
-              href="/#free-trial"
+            <Link
+              to="/free-trial"
               className="font-medium transition-colors text-gray-700 hover:text-primary-600"
             >
               Free Trial
-            </a>
+            </Link>
+
+            {user ? (
+              <div className="relative">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-accent-500 rounded-full flex items-center justify-center text-white font-semibold">
+                    {user.name?.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="font-medium text-gray-700">{user.name}</span>
+                  <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 border border-gray-100 z-50">
+                    <Link
+                      to="/profile"
+                      onClick={() => setShowUserMenu(false)}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors"
+                    >
+                      My Profile
+                    </Link>
+                    <Link
+                      to="/my-orders"
+                      onClick={() => setShowUserMenu(false)}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors"
+                    >
+                      My Orders
+                    </Link>
+                    <hr className="my-2" />
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link to="/login">
+                  <Button variant="secondary" size="sm">Login</Button>
+                </Link>
+                <Link to="/register">
+                  <Button size="sm">Register</Button>
+                </Link>
+              </div>
+            )}
           </div>
 
           <button
@@ -213,7 +277,7 @@ const Navbar = () => {
                         <button
                           key={service.service}
                           onClick={() => {
-                            handleServiceClick(platform.path, service.service)
+                            handleServiceClick(platform.path)
                             setIsOpen(false)
                           }}
                           className="block w-full text-left py-1 text-sm text-gray-600 hover:text-primary-600"
@@ -242,7 +306,7 @@ const Navbar = () => {
                       <button
                         key={service.service}
                         onClick={() => {
-                          handleServiceClick(platform.path, service.service)
+                          handleServiceClick(platform.path)
                           setIsOpen(false)
                         }}
                         className="block w-full text-left py-1 text-sm text-gray-600 hover:text-primary-600"
@@ -254,17 +318,22 @@ const Navbar = () => {
                 </div>
               ))}
 
-              <a href="/#services" onClick={() => setIsOpen(false)}>
-                <Button fullWidth size="sm">Get Started</Button>
-              </a>
-              
-              <a
-                href="/#free-trial"
+              <Link
+                to="/free-trial"
                 onClick={() => setIsOpen(false)}
                 className="block py-2 font-medium text-gray-700 text-center"
               >
                 Free Trial
-              </a>
+              </Link>
+
+              <div className="space-y-2 pt-2">
+                <Link to="/login" onClick={() => setIsOpen(false)}>
+                  <Button fullWidth variant="secondary" size="sm">Login</Button>
+                </Link>
+                <Link to="/register" onClick={() => setIsOpen(false)}>
+                  <Button fullWidth size="sm">Register</Button>
+                </Link>
+              </div>
             </div>
           </div>
         )}

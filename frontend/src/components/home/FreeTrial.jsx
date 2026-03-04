@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom'
 import SectionWrapper from '../common/SectionWrapper'
 
 const FreeTrial = () => {
+  const navigate = useNavigate()
   const freeServices = [
     {
       title: 'TikTok Likes Generator',
@@ -78,7 +80,10 @@ const FreeTrial = () => {
                 </p>
 
                 {/* Button */}
-                <button className={`w-full bg-gradient-to-r ${service.gradient} text-white py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105`}>
+                <button 
+                  onClick={() => navigate('/free-trial')}
+                  className={`w-full bg-gradient-to-r ${service.gradient} text-white py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105`}
+                >
                   {service.buttonText}
                 </button>
               </div>

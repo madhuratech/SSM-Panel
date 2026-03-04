@@ -101,6 +101,63 @@
   }
 }
 
+@keyframes borderFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes borderDraw {
+  0% {
+    stroke-dashoffset: 400;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes borderDrawSmooth {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes borderFlowHorizontal {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 0%;
+  }
+}
+
+@keyframes borderReveal {
+  0% {
+    clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+  }
+  25% {
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  }
+  50% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  75% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
 /* Animation classes */
 .animate-float {
   animation: float 6s ease-in-out infinite;
@@ -126,6 +183,19 @@
   animation: arrowSlide 2s ease-in-out infinite;
 }
 
+.animate-border-flow {
+  background-size: 200% 200%;
+  animation: borderFlow 3s ease infinite;
+}
+
+.animate-border-draw {
+  animation: borderDraw 1.5s ease-out forwards;
+}
+
+.animate-border-draw-smooth {
+  animation: borderDrawSmooth 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
 /* Delay classes */
 .animation-delay-1000 {
   animation-delay: 1s;
@@ -141,6 +211,10 @@
 
 .animation-delay-4000 {
   animation-delay: 4s;
+}
+
+.delay-1500 {
+  transition-delay: 1.5s;
 }
 
 /* Background decorative elements */
